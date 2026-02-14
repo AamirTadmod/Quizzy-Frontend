@@ -65,14 +65,14 @@ const Home = () => {
       title="Reference Hub"
       description="Explore official IPR resources, government portals, and trusted legal references."
       buttonText="Visit Reference Hub"
-      link="/reference-hub"
+      link="https://spectacular-gelato-0498cd.netlify.app/"
     />
 
     <SimpleNavCard
       title="Fact Explorer"
       description="Discover interesting Intellectual Property facts and strengthen your legal awareness."
       buttonText="Visit Fact Explorer"
-      link="/fact-explorer"
+      link="https://magnificent-peony-e1904a.netlify.app/"
     />
   </div>
 
