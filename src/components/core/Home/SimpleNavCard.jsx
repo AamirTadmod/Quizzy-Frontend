@@ -1,16 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const SimpleNavCard = ({ title, buttonText, link }) => {
+const SimpleNavCard = ({ title, description, buttonText, link }) => {
   return (
-    <div className="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
+    <div className="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
       
-      <div className="p-6 flex-grow flex items-center justify-center">
-        <h2 className="text-2xl font-bold text-[#1e3a8a] text-center">
+      <div className="p-6 flex-grow">
+        {/* Title */}
+        <h2 className="text-2xl font-bold text-[#1e3a8a] mb-3">
           {title}
         </h2>
+
+        {/* Description */}
+        <p className="text-gray-500 text-sm leading-relaxed">
+          {description}
+        </p>
       </div>
 
+      {/* Button */}
       <div className="px-6 pb-6">
         <Link
           to={link}

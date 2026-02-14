@@ -12,7 +12,7 @@ const SignUp = () => {
     password: true,
     confirmPassword: true,
   })
-  const [role, setRole] = useState("user");
+  // const [role, setRole] = useState("user");
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit, formState: { errors }, setValue } = useForm()
   const navigate = useNavigate();
@@ -37,9 +37,9 @@ const SignUp = () => {
     }
   }
 
-  useEffect(() => {
-    setValue("role", "user")
-  }, [setValue])
+  // useEffect(() => {
+  //   setValue("role", "user")
+  // }, [setValue])
 
   return (
     <div className='min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] px-4 py-10'>
@@ -138,7 +138,7 @@ const SignUp = () => {
           </div>
 
           {/* Role Switcher */}
-          <div className='flex flex-col gap-2 mt-2'>
+          {/* <div className='flex flex-col gap-2 mt-2'>
             <label className="font-semibold text-gray-700 text-sm uppercase tracking-wider">I am an:</label>
             <div className='flex bg-gray-100 p-1 rounded-lg w-full'>
               <button
@@ -154,7 +154,7 @@ const SignUp = () => {
                 Admin
               </button>
             </div>
-          </div>
+          </div> */}
 
           <div className='mt-4'>
             <Button disabled={loading} type={"submit"} className="w-full bg-[#1e3a8a] hover:bg-[#152a61] text-white py-3 rounded-lg font-bold shadow-md transition-all">

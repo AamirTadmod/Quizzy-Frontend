@@ -4,10 +4,36 @@ import React from 'react'
 import { formatDistanceToNow } from 'date-fns';
 import Button from "../components/Button"
 import { FaHome, FaUserCircle } from "react-icons/fa";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateProfile } from "../services/operations/AuthAPIs";
+
 
 const Profile = () => {
   const { user } = useSelector(state => state.auth)
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [editMode, setEditMode] = useState(false);
+  const [formData, setFormData] = useState({
+    username: user.username,
+    email: user.email,
+  });
+
+  const handleChange = (e) => {
+  setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+      });
+    };
+
+  const handleSave = async () => {
+  const success = await updateProfile(formData, dispatch);
+  if (success) {
+      setEditMode(false);
+    }
+  };
+
+
 
   return (
     <div className="bg-[#f8fafc] min-h-screen py-12 px-4">
@@ -29,14 +55,37 @@ const Profile = () => {
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8 text-lg'>
             
             <div className="flex flex-col gap-1">
-                <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Username</span>
-                <h2 className="text-[#1e3a8a] font-semibold">{user.username}</h2>
-            </div>
+  <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Username</span>
 
-            <div className="flex flex-col gap-1">
-                <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Email Address</span>
-                <p className="text-gray-700">{user.email}</p>
-            </div>
+  {!editMode ? (
+    <h2 className="text-[#1e3a8a] font-semibold">{user.username}</h2>
+  ) : (
+    <input
+      type="text"
+      name="username"
+      value={formData.username}
+      onChange={handleChange}
+      className="border border-gray-300 rounded-lg px-3 py-2"
+    />
+  )}
+</div>
+
+<div className="flex flex-col gap-1">
+  <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Email Address</span>
+
+  {!editMode ? (
+    <p className="text-gray-700">{user.email}</p>
+  ) : (
+    <input
+      type="email"
+      name="email"
+      value={formData.email}
+      onChange={handleChange}
+      className="border border-gray-300 rounded-lg px-3 py-2"
+    />
+  )}
+</div>
+
 
             <div className="flex flex-col gap-1">
                 <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Member Since</span>
@@ -57,6 +106,34 @@ const Profile = () => {
           </div>
 
           <hr className="my-10 border-gray-100" />
+
+          <div className="flex justify-end gap-3 mb-6">
+  {!editMode ? (
+    <Button
+      onClick={() => setEditMode(true)}
+      className="bg-[#1e3a8a] text-white px-6 py-2 rounded-lg"
+    >
+      Edit Profile
+    </Button>
+  ) : (
+    <>
+      <Button
+        onClick={handleSave}
+        className="bg-green-600 text-white px-6 py-2 rounded-lg"
+      >
+        Save
+      </Button>
+
+      <Button
+        onClick={() => setEditMode(false)}
+        className="bg-gray-400 text-white px-6 py-2 rounded-lg"
+      >
+        Cancel
+      </Button>
+    </>
+  )}
+</div>
+
 
           {/* Action Area */}
           <div className='flex flex-col items-center justify-center gap-4 py-6'>

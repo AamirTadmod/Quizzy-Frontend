@@ -61,12 +61,12 @@ const AdminQuizes = () => {
                         </div>
                     </div>
 
-                    <button 
+                    {/* <button 
                         onClick={() => navigate('/create-quiz')}
                         className="flex items-center justify-center gap-2 bg-[#1e3a8a] text-white px-6 py-3 rounded-lg font-bold hover:bg-[#152a61] transition-all shadow-md w-full md:w-auto"
                     >
                         <FaPlus /> Create New Quiz
-                    </button>
+                    </button> */}
                 </div>
 
                 {/* Content Area */}

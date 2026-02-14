@@ -56,13 +56,14 @@ const DashboardLayout = ({ children }) => {
                     </nav>
 
                     <div className='w-full md:w-auto border-t md:border-t-0 pt-3 md:pt-0'>
-                        <Button 
-                            active={false} 
+                        <Button
+                            active={false}
                             onClick={() => logout(dispatch, navigate)}
-                            className="!py-2 !px-4 !rounded-lg text-xs md:text-sm flex items-center gap-2 bg-red-50 !text-red-600 border border-red-100 hover:!bg-red-600 hover:!text-white transition-all shadow-none"
-                        >
+                            className="py-2 px-4 rounded bg-red-600 text-white text-sm flex items-center gap-2"
+                            >
                             <FaSignOutAlt /> Logout
                         </Button>
+
                     </div>
                 </div>
 

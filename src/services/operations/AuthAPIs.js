@@ -63,3 +63,36 @@ export const logout = async (dispatch, navigate) => {
   }
   return false;
 };  
+
+//update profile method
+export const updateProfile = async (data, dispatch) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await apiConnector(
+      "PUT",
+      "/api/v1/update-profile",
+      data,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+
+    if (!response?.data?.success) {
+      throw new Error(response?.data?.error);
+    }
+
+    localStorage.setItem("user", JSON.stringify(response.data.data));
+    dispatch(setUser(response.data.data));
+
+    toast.success("Profile updated successfully");
+    return true;
+
+  } catch (e) {
+    console.log("UPDATE PROFILE ERROR:", e);
+    toast.error(e?.response?.data?.error || "Update failed");
+  }
+
+  return false;
+};
+

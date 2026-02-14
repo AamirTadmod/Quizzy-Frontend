@@ -63,12 +63,14 @@ const Home = () => {
   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
     <SimpleNavCard
       title="Reference Hub"
+      description="Explore official IPR resources, government portals, and trusted legal references."
       buttonText="Visit Reference Hub"
       link="/reference-hub"
     />
 
     <SimpleNavCard
       title="Fact Explorer"
+      description="Discover interesting Intellectual Property facts and strengthen your legal awareness."
       buttonText="Visit Fact Explorer"
       link="/fact-explorer"
     />

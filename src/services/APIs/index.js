@@ -3,6 +3,7 @@
 export const authEndpoints = {
   SIGNUP: "/api/v1/register",
   LOGIN: "/api/v1/login",
+  UPDATE_PROFILE: "/api/v1/update-profile",
 };
 
 export const quizEndpoints = {
