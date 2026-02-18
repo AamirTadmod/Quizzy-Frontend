@@ -31,10 +31,10 @@ const Navbar = () => {
                         Leaderboard
                     </NavLink>
 
-                    {/* This matches the Reference Hub button in your screenshot */}
+                    {/* This matches the Reference Hub button in your screenshot
                     <NavLink to={"/https://spectacular-gelato-0498cd.netlify.app/"} className={navLinkStyles}>
                         Reference Hub
-                    </NavLink>
+                    </NavLink> */}
 
                     {/* Dashboard/Profile Link */}
                     <NavLink to={"/dashboard"} className={navLinkStyles}>
