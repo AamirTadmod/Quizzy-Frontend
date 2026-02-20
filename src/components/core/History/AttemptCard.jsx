@@ -57,7 +57,7 @@ const AttemptCard = ({ item }) => {
                 onClick={() => navigate(`../../quiz/${item?.quizId?._id}`)}
                 className="flex items-center gap-2 py-3 font-bold text-sm shadow-none"
             >
-                <FaHistory className="text-xs" /> Attempt Again
+                Re-attempt Quiz
             </Button>
         </div>
     )

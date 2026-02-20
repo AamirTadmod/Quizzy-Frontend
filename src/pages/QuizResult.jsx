@@ -5,12 +5,30 @@ import { FaTrophy, FaArrowLeft } from "react-icons/fa";
 
 const QuizResults = () => {
     const location = useLocation();
-    const { score, total } = location.state || { score: 0, total: 0 };
+    const {
+    score,
+    total,
+    questions = [],
+    userAnswers = []
+    } = location.state || {};
+
     const navigate = useNavigate();
 
     // Calculate percentage for styling
     const percentage = total > 0 ? (score / total) * 100 : 0;
     const isPassed = percentage >= 40;
+    const getUserAnswer = (questionId) => {
+    return userAnswers.find(a => a.questionId === questionId);
+    };
+
+    const getCorrectOption = (question) => {
+    return question.options.find(opt => opt.isCorrect);
+    };
+
+    const getSelectedOption = (question, selectedId) => {
+    return question.options.find(opt => opt._id === selectedId);
+    };
+
 
     return (
         <div className='min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center px-4'>
@@ -58,10 +76,54 @@ const QuizResults = () => {
                 </div>
             </div>
 
-            {/* Branding Footer */}
+            {/* Question Review Section */}
+            {questions.length > 0 && (
+            <div className="max-w-3xl w-full mt-10 space-y-6">
+
+                <h2 className="text-2xl font-bold text-[#1e3a8a] text-center">
+                Answer Review
+                </h2>
+
+                {questions.map((q, index) => {
+                const userAnswer = getUserAnswer(q._id);
+                const correctOption = getCorrectOption(q);
+                const selectedOption = getSelectedOption(q, userAnswer?.selectedOption);
+                const isCorrect = selectedOption?._id === correctOption?._id;
+
+                return (
+                    <div
+                    key={q._id}
+                    className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm"
+                    >
+                    <p className="font-semibold text-[#1e3a8a] mb-3">
+                        Q{index + 1}. {q.questionText}
+                    </p>
+
+                    <span className={`text-xs font-bold px-3 py-1 rounded-full ${
+                        isCorrect ? "bg-green-100 text-green-600" : "bg-red-100 text-red-500"
+                    }`}>
+                        {isCorrect ? "Correct" : "Incorrect"}
+                    </span>
+
+                    <p className={`font-medium mt-2 ${isCorrect ? "text-green-600" : "text-red-500"}`}>
+                        Your Answer: {selectedOption?.text || "Not Attempted"}
+                    </p>
+
+                    {!isCorrect && (
+                        <p className="text-green-600 font-medium">
+                        Correct Answer: {correctOption?.text}
+                        </p>
+                    )}
+                    </div>
+                );
+                })}
+            </div>
+            )}
+            
+            {/* Branding Footer
             <footer className="mt-8 text-gray-400 text-xs">
                 © 2026 IPQuest - Empowering IPR Awareness Through Gamification
-            </footer>
+            </footer> */}
         </div>
     );
 };

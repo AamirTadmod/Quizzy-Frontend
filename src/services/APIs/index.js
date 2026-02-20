@@ -16,6 +16,7 @@
     GET_QUIZ_DETAILS: "/api/v1/quizzes",
     ATTEMMP_QUIZ: "/api/v1/quizzes",
     GET_USER_ATTEMPS: "/api/v1/attempts",
+    GET_QUIZ_LEADERBOARD: "/api/v1/quizzes",
   };
 
   export const questionEndpoints = {

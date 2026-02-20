@@ -15,9 +15,17 @@ const Profile = () => {
   const dispatch = useDispatch();
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
-    username: user.username,
-    email: user.email,
-  });
+  username: user.username,
+  email: user.email,
+  firstName: user.firstName || "",
+  lastName: user.lastName || "",
+  mobileNumber: user.mobileNumber || "",
+  organization: user.organization || "",
+  profession: user.profession || "",
+  state: user.state || "",
+  country: user.country || "",
+});
+
 
   const handleChange = (e) => {
   setFormData({
@@ -55,36 +63,168 @@ const Profile = () => {
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8 text-lg'>
             
             <div className="flex flex-col gap-1">
-  <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Username</span>
+              <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Username</span>
 
-  {!editMode ? (
-    <h2 className="text-[#1e3a8a] font-semibold">{user.username}</h2>
-  ) : (
-    <input
-      type="text"
-      name="username"
-      value={formData.username}
-      onChange={handleChange}
-      className="border border-gray-300 rounded-lg px-3 py-2"
-    />
-  )}
-</div>
+              {!editMode ? (
+                <h2 className="text-[#1e3a8a] font-semibold">{user.username}</h2>
+              ) : (
+                <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  className="border border-gray-300 rounded-lg px-3 py-2"
+                />
+              )}
+            </div>
 
-<div className="flex flex-col gap-1">
-  <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Email Address</span>
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Email Address</span>
 
-  {!editMode ? (
-    <p className="text-gray-700">{user.email}</p>
-  ) : (
-    <input
-      type="email"
-      name="email"
-      value={formData.email}
-      onChange={handleChange}
-      className="border border-gray-300 rounded-lg px-3 py-2"
-    />
-  )}
-</div>
+              {!editMode ? (
+                <p className="text-gray-700">{user.email}</p>
+              ) : (
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="border border-gray-300 rounded-lg px-3 py-2"
+                />
+              )}
+            </div>
+
+            {/* First Name */}
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">First Name</span>
+
+              {!editMode ? (
+                <h2 className="text-[#1e3a8a] font-semibold">{user.firstName}</h2>
+              ) : (
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  className="border border-gray-300 rounded-lg px-3 py-2"
+                />
+              )}
+            </div>
+
+            {/* Last Name */}
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Last Name</span>
+
+              {!editMode ? (
+                <p className="text-gray-700">{user.lastName}</p>
+              ) : (
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  className="border border-gray-300 rounded-lg px-3 py-2"
+                />
+              )}
+            </div>
+
+
+            {/* Mobile Number */}
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Mobile Number</span>
+
+              {!editMode ? (
+                <p className="text-gray-700">
+                  {user.mobileNumber ? `+91 ${user.mobileNumber}` : "N/A"}
+                </p>
+              ) : (
+                <input
+                  type="tel"
+                  name="mobileNumber"
+                  maxLength={10}
+                  value={formData.mobileNumber}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.replace(/\D/g, "");
+                    handleChange(e);
+                  }}
+                  className="border border-gray-300 rounded-lg px-3 py-2"
+                />
+              )}
+            </div>
+
+
+            {/* Organization */}
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Organization</span>
+
+              {!editMode ? (
+                <p className="text-gray-700">{user.organization || "N/A"}</p>
+              ) : (
+                <input
+                  type="text"
+                  name="organization"
+                  value={formData.organization}
+                  onChange={handleChange}
+                  className="border border-gray-300 rounded-lg px-3 py-2"
+                />
+              )}
+            </div>
+
+
+            {/* Profession */}
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Profession</span>
+
+              {!editMode ? (
+                <p className="text-gray-700">{user.profession || "N/A"}</p>
+              ) : (
+                <input
+                  type="text"
+                  name="profession"
+                  value={formData.profession}
+                  onChange={handleChange}
+                  className="border border-gray-300 rounded-lg px-3 py-2"
+                />
+              )}
+            </div>
+
+
+            {/* Location */}
+            {/* State */}
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">State</span>
+
+              {!editMode ? (
+                <p className="text-gray-700">{user.state || "N/A"}</p>
+              ) : (
+                <input
+                  type="text"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                  className="border border-gray-300 rounded-lg px-3 py-2"
+                />
+              )}
+            </div>
+
+            {/* Country */}
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Country</span>
+
+              {!editMode ? (
+                <p className="text-gray-700">{user.country || "N/A"}</p>
+              ) : (
+                <input
+                  type="text"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                  className="border border-gray-300 rounded-lg px-3 py-2"
+                />
+              )}
+            </div>
+
+
 
 
             <div className="flex flex-col gap-1">

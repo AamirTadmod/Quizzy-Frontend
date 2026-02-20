@@ -32,29 +32,42 @@ const Leaderboard = () => {
         <p className="text-gray-600">Loading leaderboard...</p>
       ) : (
         <table className="w-full border border-gray-300">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-3 border">Rank</th>
-              <th className="p-3 border">Username</th>
-              <th className="p-3 border">Points</th>
-              <th className="p-3 border">Quizzes Completed</th>
-              <th className="p-3 border">Badges</th>
+        <thead className="bg-gray-100">
+          <tr>
+            <th className="p-3 border">Rank</th>
+            <th className="p-3 border">Username</th>
+            <th className="p-3 border">Accuracy</th>
+            <th className="p-3 border">Score</th>
+            <th className="p-3 border">Attempts</th>
+            <th className="p-3 border">Badges</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {leaders.map((user, index) => (
+            <tr key={index} className="text-center">
+              <td className="p-3 border font-bold">{index + 1}</td>
+
+              <td className="p-3 border">{user.username}</td>
+
+              <td className="p-3 border text-blue-700 font-semibold">
+                {(user.accuracy * 100).toFixed(2)}%
+              </td>
+
+              <td className="p-3 border">
+                {user.totalCorrect} / {user.totalQuestions}
+              </td>
+
+              <td className="p-3 border">{user.attempts}</td>
+
+              <td className="p-3 border">
+                {user.badges?.length > 0 ? user.badges.join(", ") : "—"}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {leaders.map((user) => (
-              <tr key={user.rank} className="text-center">
-                <td className="p-3 border">{user.rank}</td>
-                <td className="p-3 border">{user.username}</td>
-                <td className="p-3 border">{user.points}</td>
-                <td className="p-3 border">{user.quizzesCompleted}</td>
-                <td className="p-3 border">
-                  {user.badges.length > 0 ? user.badges.join(", ") : "—"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          ))}
+        </tbody>
+      </table>
+
       )}
     </div>
   );

@@ -82,6 +82,33 @@ const SignUp = () => {
             {errors?.username && <RequiredError>{errors.username.message}</RequiredError>}
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          {/* First Name */}
+          <div className='flex flex-col gap-1'>
+            <label className="font-semibold text-gray-700">First Name</label>
+            <input
+              placeholder='John'
+              className='py-2 border border-gray-300 rounded-lg px-4 outline-none focus:ring-2 focus:ring-blue-500'
+              {...register("firstName", { required: "First name is required" })}
+            />
+            {errors?.firstName && <RequiredError>{errors.firstName.message}</RequiredError>}
+          </div>
+
+          {/* Last Name */}
+          <div className='flex flex-col gap-1'>
+            <label className="font-semibold text-gray-700">Last Name</label>
+            <input
+              placeholder='Doe'
+              className='py-2 border border-gray-300 rounded-lg px-4 outline-none focus:ring-2 focus:ring-blue-500'
+              {...register("lastName", { required: "Last name is required" })}
+            />
+            {errors?.lastName && <RequiredError>{errors.lastName.message}</RequiredError>}
+          </div>
+
+        </div>
+
+
           {/* Email */}
           <div className='flex flex-col gap-1'>
             <label htmlFor="email" className="font-semibold text-gray-700">Email Address</label>
@@ -94,6 +121,82 @@ const SignUp = () => {
             />
             {errors?.email && <RequiredError>{errors.email.message}</RequiredError>}
           </div>
+
+          {/* Mobile Number */}
+          <div className='flex flex-col gap-1'>
+            <label className="font-semibold text-gray-700">Mobile Number (+91)</label>
+            <input
+              type="tel"
+              placeholder='Enter 10 digit mobile number'
+              maxLength={10}
+              className='py-2 border border-gray-300 rounded-lg px-4 outline-none focus:ring-2 focus:ring-blue-500'
+              {...register("mobileNumber", {
+                required: "Mobile number is required",
+                pattern: {
+                  value: /^[6-9]\d{9}$/,
+                  message: "Enter a valid 10 digit mobile number"
+                }
+              })}
+              onInput={(e) => {
+                e.target.value = e.target.value.replace(/\D/g, "")
+              }}
+            />
+
+            {errors?.mobileNumber && (
+              <RequiredError>{errors.mobileNumber.message}</RequiredError>
+            )}
+
+          </div>
+
+          {/* Organization */}
+          <div className='flex flex-col gap-1'>
+            <label className="font-semibold text-gray-700">Organization / Institution</label>
+            <input
+              placeholder='College / Company name'
+              className='py-2 border border-gray-300 rounded-lg px-4 outline-none focus:ring-2 focus:ring-blue-500'
+              {...register("organization")}
+            />
+          </div>
+
+          {/* Country & State */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <div className='flex flex-col gap-1'>
+              <label className="font-semibold text-gray-700">Country</label>
+              <input
+                placeholder='Country'
+                className='py-2 border border-gray-300 rounded-lg px-4 outline-none focus:ring-2 focus:ring-blue-500'
+                {...register("country")}
+              />
+            </div>
+
+            <div className='flex flex-col gap-1'>
+              <label className="font-semibold text-gray-700">State</label>
+              <input
+                placeholder='State'
+                className='py-2 border border-gray-300 rounded-lg px-4 outline-none focus:ring-2 focus:ring-blue-500'
+                {...register("state")}
+              />
+            </div>
+
+          </div>
+
+          {/* Profession */}
+          <div className='flex flex-col gap-1'>
+            <label className="font-semibold text-gray-700">Profession</label>
+            <select
+              className='py-2 border border-gray-300 rounded-lg px-4 outline-none focus:ring-2 focus:ring-blue-500'
+              {...register("profession")}
+            >
+              <option value="">Select Profession</option>
+              <option value="Student">Student</option>
+              <option value="Faculty">Faculty</option>
+              <option value="Advocate">Advocate</option>
+              <option value="Researcher">Researcher</option>
+              <option value="Entrepreneur">Entrepreneur</option>
+            </select>
+          </div>
+
 
           {/* Password */}
           <div className='flex flex-col gap-1'>

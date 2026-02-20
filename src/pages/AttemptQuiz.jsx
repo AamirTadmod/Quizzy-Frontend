@@ -7,6 +7,9 @@ import { useSelector } from 'react-redux'
 import { formatDistanceToNow } from 'date-fns'
 import QuizQuestions from '../components/core/attemptQuiz/QuizQuestions'
 import { FaClock, FaUserEdit, FaInfoCircle } from 'react-icons/fa'
+import { useNavigate } from "react-router-dom";
+
+
 
 const AttemptQuiz = () => {
     const [quizDetails, setQuizDetails] = useState(null);
@@ -16,6 +19,8 @@ const AttemptQuiz = () => {
 
     const { token } = useSelector(state => state.auth)
     const { id: quizId } = useParams();
+    const navigate = useNavigate();
+
 
     const fetchQuizQuestions = async () => {
         setQuestionsLoading(true);
@@ -71,6 +76,13 @@ const AttemptQuiz = () => {
                                         <h3 className='text-2xl md:text-3xl font-black text-[#1e3a8a] leading-tight'>
                                             {quizDetails?.title}
                                         </h3>
+                                        <button
+                                            onClick={() => navigate(`/quiz/${quizId}/leaderboard`)}
+                                            className="mt-3 text-sm bg-yellow-400 hover:bg-yellow-500 text-black font-bold px-4 py-2 rounded-lg"
+                                            >
+                                            🏆 View Leaderboard for this Quiz
+                                        </button>
+
                                     </div>
                                     
                                     <div className='flex items-center gap-3 bg-blue-50 px-4 py-2 rounded-lg border border-blue-100'>

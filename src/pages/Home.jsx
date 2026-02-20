@@ -65,7 +65,7 @@ const Home = () => {
       title="Reference Hub"
       description="Explore official IPR resources, government portals, and trusted legal references."
       buttonText="Visit Reference Hub"
-      link="https://spectacular-gelato-0498cd.netlify.app/"
+      link="https://reference-be-1.onrender.com/"
     />
 
     <SimpleNavCard
@@ -74,6 +74,16 @@ const Home = () => {
       buttonText="Visit Fact Explorer"
       link="https://magnificent-peony-e1904a.netlify.app/"
     />
+  </div>
+
+  {/* Quizzes Section */}
+  <div className="mb-8">
+    <h2 className="text-3xl font-extrabold text-[#1e3a8a] text-center md:text-left">
+      Quizzes
+    </h2>
+    <p className="text-gray-500 mt-1 text-center md:text-left">
+      Test your knowledge and earn points by completing quizzes.
+    </p>
   </div>
 
   {

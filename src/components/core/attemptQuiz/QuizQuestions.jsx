@@ -7,6 +7,8 @@ import { apiConnector } from '../../../services/apiConnector';
 import { quizEndpoints } from "../../../services/APIs";
 import { setUser } from "../../../slices/AuthSlice";
 import { FaPlay, FaHourglassHalf, FaCheckDouble } from 'react-icons/fa';
+import toast from "react-hot-toast";
+
 
 const QuizQuestions = ({ quizDetails, quizQuestions }) => {
     const [quizStarted, setQuizStarted] = useState(false);
@@ -15,6 +17,10 @@ const QuizQuestions = ({ quizDetails, quizQuestions }) => {
     const { token, user } = useSelector(state => state.auth);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const attemptedCount = userAnswers.length;
+    const totalQuestions = quizQuestions?.length || 0;
+    const allAnswered = attemptedCount === totalQuestions;
+
 
     useEffect(() => {
         if (quizDetails?.timer) {
@@ -22,18 +28,23 @@ const QuizQuestions = ({ quizDetails, quizQuestions }) => {
         }
     }, [quizDetails]);
 
-    useEffect(() => {
-        let timer;
-        if (quizStarted && remainingTime > 0) {
-            timer = setInterval(() => {
-                setRemainingTime(prevTime => prevTime - 1);
-            }, 1000);
-        } else if (quizStarted && remainingTime === 0) {
-            clearInterval(timer);
-            submitQuiz();
-        }
-        return () => clearInterval(timer);
-    }, [quizStarted, remainingTime]);
+        useEffect(() => {
+            let timer;
+
+            if (quizStarted && remainingTime > 0) {
+                timer = setInterval(() => {
+                    setRemainingTime(prevTime => prevTime - 1);
+                }, 1000);
+            }
+
+            else if (quizStarted && remainingTime === 0) {
+                clearInterval(timer);
+                submitQuiz();   
+            }
+
+            return () => clearInterval(timer);
+        }, [quizStarted, remainingTime]);
+
 
     const handleAnswerChange = useCallback((questionId, selectedOption) => {
         setUserAnswers(prevAnswers => {
@@ -55,24 +66,48 @@ const QuizQuestions = ({ quizDetails, quizQuestions }) => {
     };
 
     const submitQuiz = async () => {
-        try {
-            const response = await apiConnector(
-                'POST',
-                `${quizEndpoints.ATTEMMP_QUIZ}/${quizDetails._id}/attempt`,
-                {
-                    quizId: quizDetails._id,
-                    answers: userAnswers,
-                },
-                {
-                    Authorization: `Bearer ${token}`,
-                }
-            );
-            dispatch(setUser({ ...user, attemptedQuizzes: [...(user.attemptedQuizzes || []), quizDetails._id] }));
-            navigate('/quiz-results', { state: { score: response.data.score, total: quizQuestions?.length } });
-        } catch (error) {
-            console.error('Error submitting quiz:', error);
-        }
-    };
+
+    if (!allAnswered) {
+        toast.error("Please attempt all questions before submitting");
+        return;
+    }
+
+    try {
+        const response = await apiConnector(
+            'POST',
+            `${quizEndpoints.ATTEMMP_QUIZ}/${quizDetails._id}/attempt`,
+            {
+                quizId: quizDetails._id,
+                answers: userAnswers,
+            },
+            {
+                Authorization: `Bearer ${token}`,
+            }
+        );
+
+        dispatch(setUser({
+            ...user,
+            attemptedQuizzes: [
+                ...(user.attemptedQuizzes || []),
+                quizDetails._id
+            ]
+        }));
+
+        navigate('/quiz-results', {
+            state: {
+                score: response.data.score,
+                total: quizQuestions?.length,
+                questions: quizQuestions,
+                userAnswers
+            }
+        });
+
+
+    } catch (error) {
+        console.error('Error submitting quiz:', error);
+    }
+};
+
 
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60);
@@ -96,18 +131,43 @@ const QuizQuestions = ({ quizDetails, quizQuestions }) => {
             ) : (
                 <div className='w-full max-w-4xl mx-auto'>
                     {/* Sticky Timer Bar */}
-                    <div className='sticky top-4 z-20 mb-8 flex justify-between items-center bg-white border border-gray-200 py-3 px-6 rounded-xl shadow-md'>
-                        <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                            <span className="text-sm font-bold text-gray-700 uppercase tracking-wider">Quiz in Progress</span>
-                        </div>
-                        <div className='flex items-center gap-3'>
-                            <FaHourglassHalf className={remainingTime < 60 ? "text-red-500 animate-bounce" : "text-[#1e3a8a]"} />
-                            <span className={`text-xl font-black ${remainingTime < 60 ? "text-red-600" : "text-[#1e3a8a]"}`}>
-                                {formatTime(remainingTime)}
-                            </span>
-                        </div>
+                        <div className='sticky top-4 z-20 mb-8 flex flex-col md:flex-row md:justify-between md:items-center gap-3 bg-white border border-gray-200 py-3 px-6 rounded-xl shadow-md'>
+
+                    {/* LEFT */}
+                    <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                        <span className="text-sm font-bold text-gray-700 uppercase tracking-wider">
+                        Quiz in Progress
+                        </span>
                     </div>
+
+                    {/* CENTER – TIMER */}
+                    <div className='flex items-center gap-3'>
+                        <FaHourglassHalf
+                        className={remainingTime < 60 ? "text-red-500 animate-bounce" : "text-[#1e3a8a]"}
+                        />
+                        <span className={`text-xl font-black ${remainingTime < 60 ? "text-red-600" : "text-[#1e3a8a]"}`}>
+                        {formatTime(remainingTime)}
+                        </span>
+                    </div>
+
+                    {/* RIGHT – ANSWER COUNT + LEADERBOARD BUTTON */}
+                    <div className="flex items-center gap-3">
+                        <div className="text-sm font-bold text-gray-600">
+                        Answered: {attemptedCount} / {totalQuestions}
+                        </div>
+
+                        <Button
+                        type="button"
+                        onClick={() => navigate(`/quiz/${quizDetails?._id}/leaderboard`)}
+                        className="px-4 py-2 text-sm"
+                        >
+                        🏆 Topper
+                        </Button>
+                    </div>
+
+                    </div>
+
 
                     {/* Questions Section */}
                     <div className='space-y-6 mb-10'>
@@ -131,9 +191,17 @@ const QuizQuestions = ({ quizDetails, quizQuestions }) => {
                             <p className="text-[#1e3a8a] font-bold">Finished with your answers?</p>
                             <p className="text-blue-400 text-sm">Double check before submitting.</p>
                         </div>
-                        <Button className='w-full md:w-max px-10 flex items-center gap-2' onClick={submitQuiz}>
+                        <Button
+                            disabled={!allAnswered}
+                            className={`w-full md:w-max px-10 flex items-center gap-2 ${
+                                !allAnswered ? "opacity-50 cursor-not-allowed" : ""
+                            }`}
+                            onClick={submitQuiz}
+                            >
                             <FaCheckDouble /> Finish and Submit
                         </Button>
+
+
                     </div>
                 </div>
             )}
