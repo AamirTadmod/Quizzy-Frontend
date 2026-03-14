@@ -1,6 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { apiConnector } from "../services/apiConnector";
 
+const badgeOrder = [
+  "IPR Beginner",
+  "IPR Learner",
+  "IPR Explorer",
+  "IPR Enthusiast",
+  "IPR Achiever",
+  "IPR Expert",
+  "IPR Master"
+];
+
+const getHighestBadge = (badges) => {
+  if (!badges || badges.length === 0) return "—";
+
+  let highest = badges[0];
+
+  badges.forEach((badge) => {
+    if (badgeOrder.indexOf(badge) > badgeOrder.indexOf(highest)) {
+      highest = badge;
+    }
+  });
+
+  return highest;
+};
 const Leaderboard = () => {
   const [leaders, setLeaders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -51,7 +74,7 @@ const Leaderboard = () => {
               <td className="p-3 border">{user.username}</td>
 
               <td className="p-3 border text-blue-700 font-semibold">
-                {(user.accuracy * 100).toFixed(2)}%
+                {user.accuracy.toFixed(2)}%
               </td>
 
               <td className="p-3 border">
@@ -61,7 +84,7 @@ const Leaderboard = () => {
               <td className="p-3 border">{user.attempts}</td>
 
               <td className="p-3 border">
-                {user.badges?.length > 0 ? user.badges.join(", ") : "—"}
+                {getHighestBadge(user.badges)}
               </td>
             </tr>
           ))}

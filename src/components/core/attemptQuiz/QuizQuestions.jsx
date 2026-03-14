@@ -20,6 +20,7 @@ const QuizQuestions = ({ quizDetails, quizQuestions }) => {
     const attemptedCount = userAnswers.length;
     const totalQuestions = quizQuestions?.length || 0;
     const allAnswered = attemptedCount === totalQuestions;
+    const [submitted, setSubmitted] = useState(false);
 
 
     useEffect(() => {
@@ -66,6 +67,8 @@ const QuizQuestions = ({ quizDetails, quizQuestions }) => {
     };
 
     const submitQuiz = async () => {
+        if (submitted) return;
+        setSubmitted(true);
 
     if (!allAnswered) {
         toast.error("Please attempt all questions before submitting");
