@@ -72,7 +72,7 @@ const Home = () => {
       title="Fact Explorer"
       description="Discover interesting Intellectual Property facts and strengthen your legal awareness."
       buttonText="Visit Fact Explorer"
-      link="https://magnificent-peony-e1904a.netlify.app/"
+      link="https://fact-explorer-frontend.onrender.com"
     />
   </div>
 
