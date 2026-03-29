@@ -181,6 +181,43 @@ const SignUp = () => {
 
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            {/* City */}
+            <div className='flex flex-col gap-1'>
+              <label className="font-semibold text-gray-700">City</label>
+              <input
+                placeholder='City'
+                className='py-2 border border-gray-300 rounded-lg px-4 outline-none focus:ring-2 focus:ring-blue-500'
+                {...register("city")}
+              />
+            </div>
+
+            {/* Pincode */}
+            <div className='flex flex-col gap-1'>
+              <label className="font-semibold text-gray-700">Pincode</label>
+              <input
+                type="text"
+                maxLength={6}
+                placeholder='6 digit pincode'
+                className='py-2 border border-gray-300 rounded-lg px-4 outline-none focus:ring-2 focus:ring-blue-500'
+                {...register("pincode", {
+                  pattern: {
+                    value: /^[1-9][0-9]{5}$/,
+                    message: "Invalid pincode (6 digits, cannot start with 0)"
+                  }
+                })}
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/\D/g, "")
+                }}
+              />
+              {errors?.pincode && (
+                <RequiredError>{errors.pincode.message}</RequiredError>
+              )}
+            </div>
+
+          </div>
+
           {/* Profession */}
           <div className='flex flex-col gap-1'>
             <label className="font-semibold text-gray-700">Profession</label>
@@ -197,6 +234,18 @@ const SignUp = () => {
             </select>
           </div>
 
+          <div className='flex flex-col gap-1'>
+            <label className="font-semibold text-gray-700">Gender</label>
+            <select
+              className='py-2 border border-gray-300 rounded-lg px-4 outline-none focus:ring-2 focus:ring-blue-500'
+              {...register("gender")}
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
           {/* Password */}
           <div className='flex flex-col gap-1'>

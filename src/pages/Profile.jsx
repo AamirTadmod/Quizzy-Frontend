@@ -24,6 +24,9 @@ const Profile = () => {
   profession: user.profession || "",
   state: user.state || "",
   country: user.country || "",
+  city: user.city || "",
+  pincode: user.pincode || "",
+  gender: user.gender || "",
 });
 
 
@@ -224,8 +227,61 @@ const Profile = () => {
               )}
             </div>
 
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Gender</span>
 
+              {!editMode ? (
+                <p className="text-gray-700">{user.gender || "N/A"}</p>
+              ) : (
+                <select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                  className="border border-gray-300 rounded-lg px-3 py-2"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              )}
+            </div>
 
+            <div className="flex flex-col gap-1">
+            <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">City</span>
+
+            {!editMode ? (
+              <p className="text-gray-700">{user.city || "N/A"}</p>
+            ) : (
+              <input
+                type="text"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                className="border border-gray-300 rounded-lg px-3 py-2"
+              />
+            )}
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Pincode</span>
+
+            {!editMode ? (
+              <p className="text-gray-700">{user.pincode || "N/A"}</p>
+            ) : (
+              <input
+                type="text"
+                name="pincode"
+                maxLength={6}
+                value={formData.pincode}
+                onChange={(e) => {
+                  e.target.value = e.target.value.replace(/\D/g, "");
+                  handleChange(e);
+                }}
+                className="border border-gray-300 rounded-lg px-3 py-2"
+              />
+            )}
+          </div>
 
             <div className="flex flex-col gap-1">
                 <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">Member Since</span>
