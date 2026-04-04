@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 
 
 
+
+
 const AttemptQuiz = () => {
     const [quizDetails, setQuizDetails] = useState(null);
     const [quizQuestions, setQuisQuestions] = useState(null);
@@ -21,6 +23,7 @@ const AttemptQuiz = () => {
     const { id: quizId } = useParams();
     const navigate = useNavigate();
 
+    const [quizStarted, setQuizStarted] = useState(false);
 
     const fetchQuizQuestions = async () => {
         setQuestionsLoading(true);
@@ -55,9 +58,62 @@ const AttemptQuiz = () => {
         fetchQuizQuestions();
     }, [quizId]);
 
+    useEffect(() => {
+        // 🔥 REMOVE chatbot script
+        const script = document.getElementById("chtl-script");
+        if (script) {
+            script.remove();
+        }
+
+        // ALSO remove any existing chatbot iframe/widget
+        const removeChatbot = () => {
+            const iframe = document.querySelector("iframe[src*='chatling']");
+            if (iframe) iframe.remove();
+
+            const bubble = document.querySelector("[class*='chatling']");
+            if (bubble) bubble.remove();
+        };
+
+        const interval = setInterval(removeChatbot, 300);
+
+        return () => {
+            clearInterval(interval);
+
+            // 🔁 RE-ADD chatbot script when leaving page
+            const newScript = document.createElement("script");
+            newScript.src = "https://chatling.ai/js/embed.js";
+            newScript.async = true;
+            newScript.id = "chtl-script";
+            newScript.setAttribute("data-id", "7552192739");
+
+            document.body.appendChild(newScript);
+        };
+        }, []);
+
+        useEffect(() => {
+        const handleClick = (e) => {
+            const quizContainer = document.getElementById("quiz-container");
+
+            if (quizContainer && !quizContainer.contains(e.target)) {
+            const confirmLeave = window.confirm("Do you want to quit the quiz?");
+
+            if (!confirmLeave) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            }
+        };
+
+        document.addEventListener("click", handleClick, true);
+
+        return () => {
+            document.removeEventListener("click", handleClick, true);
+        };
+        }, []);
+
     return (
         <div className="bg-[#f8fafc] min-h-screen py-8 px-4">
-            <section className='max-w-5xl mx-auto'>
+            <section id="quiz-container" className='max-w-5xl mx-auto'>
                 {/* Quiz Header Information Card */}
                 <div className='bg-white border border-gray-100 shadow-sm rounded-xl p-6 md:p-8 mb-8'>
                     {
@@ -76,12 +132,14 @@ const AttemptQuiz = () => {
                                         <h3 className='text-2xl md:text-3xl font-black text-[#1e3a8a] leading-tight'>
                                             {quizDetails?.title}
                                         </h3>
+                                        {!quizStarted && (
                                         <button
                                             onClick={() => navigate(`/quiz/${quizId}/leaderboard`)}
                                             className="mt-3 text-sm bg-yellow-400 hover:bg-yellow-500 text-black font-bold px-4 py-2 rounded-lg"
-                                            >
+                                        >
                                             🏆 View Leaderboard for this Quiz
                                         </button>
+                                        )}
 
                                     </div>
                                     

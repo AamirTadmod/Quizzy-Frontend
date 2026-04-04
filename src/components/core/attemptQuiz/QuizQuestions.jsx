@@ -29,22 +29,60 @@ const QuizQuestions = ({ quizDetails, quizQuestions }) => {
         }
     }, [quizDetails]);
 
-        useEffect(() => {
-            let timer;
+    useEffect(() => {
+        let timer;
 
-            if (quizStarted && remainingTime > 0) {
-                timer = setInterval(() => {
-                    setRemainingTime(prevTime => prevTime - 1);
-                }, 1000);
-            }
+        if (quizStarted && remainingTime > 0) {
+            timer = setInterval(() => {
+                setRemainingTime(prevTime => prevTime - 1);
+            }, 1000);
+        }
 
-            else if (quizStarted && remainingTime === 0) {
-                clearInterval(timer);
-                submitQuiz();   
-            }
+        else if (quizStarted && remainingTime === 0) {
+            clearInterval(timer);
+            submitQuiz();   
+        }
 
-            return () => clearInterval(timer);
-        }, [quizStarted, remainingTime]);
+        return () => clearInterval(timer);
+    }, [quizStarted, remainingTime]);
+
+    useEffect(() => {
+    const handleBeforeUnload = (e) => {
+        if (quizStarted) {
+        e.preventDefault();
+        e.returnValue = ""; // required for browser popup
+        }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+    }, [quizStarted]);
+
+    useEffect(() => {
+    const handlePopState = (e) => {
+    if (quizStarted) {
+        const confirmLeave = window.confirm("Do you want to quit the quiz?");
+
+        if (!confirmLeave) {
+        // ❌ User chose to stay → push back to same page
+        window.history.pushState(null, "", window.location.href);
+        } else {
+        // ✅ User chose to leave → navigate away
+        navigate(-1);
+        }
+    }
+    };
+
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+        window.removeEventListener("popstate", handlePopState);
+    };
+    }, [quizStarted]);
 
 
     const handleAnswerChange = useCallback((questionId, selectedOption) => {
@@ -160,13 +198,13 @@ const QuizQuestions = ({ quizDetails, quizQuestions }) => {
                         Answered: {attemptedCount} / {totalQuestions}
                         </div>
 
-                        <Button
+                        {/* <Button
                         type="button"
                         onClick={() => navigate(`/quiz/${quizDetails?._id}/leaderboard`)}
                         className="px-4 py-2 text-sm"
                         >
                         🏆 Topper
-                        </Button>
+                        </Button> */}
                     </div>
 
                     </div>
